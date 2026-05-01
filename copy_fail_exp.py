@@ -15,7 +15,7 @@ shell = sb.Popen(
     stderr=sb.PIPE,
     text=True
 )
-shell.stdin.write("pwd\n")
+shell.stdin.write("id\n")
 shell.stdin.write("ls\n")
 shell.stdin.write("exit\n")
 shell.stdin.flush()
